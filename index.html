@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NoMoreLife Info.">
+    <meta name="theme-color" content="#0049E5">
+    <meta property="og:title" content="NoMoreLife">
+    <meta property="og:description" content="NoMoreLife Info.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
     <title>NoMoreLife</title>
 
     <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
@@ -10,17 +16,37 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
 
+        :root {
+            --bg-start: #121212;
+            --bg-end: #1e1e1e;
+            --text: #ffffff;
+            --accent1: #0049E5;
+            --accent2: #00e5ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255,255,255,0.1);
+        }
+
+        body[data-theme="light"] {
+            --bg-start: #f5f7ff;
+            --bg-end: #e6ecff;
+            --text: #111111;
+            --accent1: #0049E5;
+            --accent2: #00b7ff;
+            --glass: rgba(0, 0, 0, 0.05);
+            --border: rgba(0,0,0,0.08);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #121212, #1e1e1e);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -53,7 +79,7 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--glass);
             backdrop-filter: blur(15px);
             border-radius: 30px;
             padding: 50px;
@@ -63,7 +89,7 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.5), 
                         0 0 50px rgba(0,73,229,0.3);
             transform: translateZ(100px) rotateX(5deg);
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid var(--border);
             animation: float 4s ease-in-out infinite;
         }
 
@@ -81,7 +107,7 @@
         }
 
         .social-link {
-            color: #ffffff;
+            color: var(--text);
             font-size: 2.5rem;
             text-decoration: none;
             transition: all 0.4s ease;
@@ -103,7 +129,7 @@
 
         .social-link:hover {
             transform: scale(1.15) rotate(360deg);
-            color: #0049E5;
+            color: var(--accent1);
             box-shadow: 0 0 20px rgba(0,73,229,0.5);
         }
 
@@ -114,21 +140,58 @@
             text-shadow: 0 0 15px rgba(0,73,229,0.7), 
                          0 0 25px rgba(0,73,229,0.5);
             letter-spacing: 3px;
-            background: linear-gradient(to right, #0049E5, #00e5ff);
+            background: linear-gradient(to right, var(--accent1), var(--accent2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
+        .date {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-top: -15px;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
         .controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-top: 40px;
+            gap: 16px;
+            user-select: none;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.12);
+            color: var(--text);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            color: var(--accent1);
+            box-shadow: 0 15px 30px rgba(0,73,229,0.3);
+        }
+        .control-btn:focus-visible {
+            outline: 2px solid var(--accent2);
+            outline-offset: 2px;
         }
 
         .feedback-btn {
-            background-color: #0049E5;
-            color: #ffffff;
+            background-color: var(--accent1);
+            color: var(--text);
             border: none;
             padding: 12px 25px;
             border-radius: 25px;
@@ -141,7 +204,7 @@
         }
 
         .feedback-btn:hover {
-            background-color: #00e5ff;
+            background-color: var(--accent2);
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0,73,229,0.6);
         }
@@ -162,7 +225,7 @@
         }
 
         .kissMyAss {
-            background: linear-gradient(135deg, #121212, #1e1e1e);
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
             width: 100%;
             height: 100%;
             position: fixed;
@@ -176,22 +239,107 @@
         }
 
         .kissMyAss button {
-            border: 2px solid #0049E5;
+            border: none;
             color: #ffffff;
-            background: transparent;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
             font-size: 40px;
             cursor: pointer;
-            padding: 15px 30px;
+            padding: 16px 36px;
             border-radius: 50px;
-            transition: all 0.5s ease;
+            transition: all 0.4s ease;
             font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            box-shadow: 0 0 25px rgba(0,73,229,0.6);
+            animation: pulse 2.5s infinite;
         }
 
         .kissMyAss button:hover {
-            background-color: #0049E5;
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(0,73,229,0.5);
+            transform: scale(1.06);
+            box-shadow: 0 0 35px rgba(0,73,229,0.7);
+            filter: brightness(1.05);
+        }
+        .kissMyAss .button-start {
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+        }
+        .kissMyAss .button-start.show {
+            opacity: 1;
+            transform: none;
+            pointer-events: auto;
+        }
+        .enter-wrapper {
+            position: fixed;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+            z-index: 10560;
+        }
+        .enter-wrapper.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .kissMyAss .button-start {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 38px;
+            border-radius: 50px;
+            position: relative;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            box-shadow: 0 10px 25px rgba(0,73,229,0.5);
+        }
+        .kissMyAss .button-start .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+        }
+        .kissMyAss .button-start .btn-text {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .enter-wrapper .hint {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            background: linear-gradient(to right, #ffffff, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 40px;
+        }
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            background: linear-gradient(to right, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.95;
+        }
+        .roles-rotator {
+            margin-top: 12px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: var(--text);
+            opacity: 0.9;
+            transition: opacity 0.25s ease;
+            background: linear-gradient(to right, #ffffff, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         #visitorCount {
@@ -199,7 +347,7 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            color: #ffffff;
+            color: var(--text);
             font-size: 1.2rem;
             font-family: 'Orbitron', sans-serif;
             transition: all 0.3s ease;
@@ -222,6 +370,7 @@
             opacity: 0;
             z-index: -1;
             transition: opacity 0.5s ease;
+            pointer-events: none;
         }
 
         #visitorCount:hover::before {
@@ -286,6 +435,7 @@
             background: radial-gradient(circle, rgba(0, 73, 229, 0.2) 0%, rgba(0, 229, 255, 0) 70%);
             animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
             opacity: 0;
+            pointer-events: none;
         }
 
         @keyframes ping {
@@ -296,7 +446,17 @@
 </head>
 <body>
     <div class="kissMyAss">
-        <button class="button-start">ENTER</button>
+        <div class="hero">
+            <h1 class="brand">NoMoreLife</h1>
+            <div id="rolesRotator" class="roles-rotator" aria-live="polite"></div>
+        </div>
+        <div class="enter-wrapper">
+            <button class="button-start">
+                <span class="btn-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                <span class="btn-text">ENTER</span>
+            </button>
+            <div class="hint">Press to enter</div>
+        </div>
     </div>
     <video class="background-video" id="background-video" loop>
         <source src="1.mp4" type="video/mp4">
@@ -307,23 +467,43 @@
     <div class="container">
 
         <div id="clock" class="clock">00:00:00</div>
+        <div id="date" class="date"></div>
 
         
         <div class="social-links">
-            <a href="https://open.spotify.com/user/31dliwtzb3wu5oitxbrvkzoutkea" class="social-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://open.spotify.com/user/31dliwtzb3wu5oitxbrvkzoutkea" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Spotify" title="Spotify">
                 <i class="fab fa-spotify"></i>
             </a>
-            <a href="https://github.com/NoMoreLifee" class="social-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/NoMoreLifee" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
                 <i class="fa-brands fa-github"></i>
             </a>
-            <a href="https://www.youtube.com/@nomorelife6932/videos" class="social-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.youtube.com/@nomorelife6932/videos" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube">
                 <i class="fab fa-youtube"></i>
             </a>
-            <a href="https://discord.com/users/460581089170292766" class="social-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://discord.com/users/460581089170292766" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Discord" title="Discord">
                 <i class="fab fa-discord"></i>
             </a>
         </div>
-        
+
+        <div class="controls">
+            <div id="visitorCount" aria-live="polite">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <defs>
+                        <linearGradient id="eyeGradient" x1="0" y1="0" x2="24" y2="24">
+                            <stop offset="0%" stop-color="#0049E5"></stop>
+                            <stop offset="100%" stop-color="#00e5ff"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path>
+                </svg>
+                <span>Views</span>
+                <span class="count">0</span>
+                <span class="visitor-ping"></span>
+            </div>
+            <button id="audioToggle" class="control-btn" aria-label="Toggle audio" title="Toggle audio">
+                <i class="fa-solid fa-volume-high"></i>
+            </button>
+        </div>
 
 
     <audio id="backgroundMusic" loop>
@@ -331,29 +511,132 @@
     </audio>
 
     <script>
+        let hour12 = true;
         function updateClock() {
             const now = new Date();
             const clock = document.getElementById('clock');
-            clock.textContent = now.toLocaleTimeString();
+            const dateEl = document.getElementById('date');
+            clock.textContent = now.toLocaleTimeString([], { hour12 });
+            dateEl.textContent = now.toLocaleDateString([], { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-
         document.addEventListener("DOMContentLoaded", function () {
             const buttonStart = document.querySelector('.button-start');
+            const enterWrapper = document.querySelector('.enter-wrapper');
             const kissMyAss = document.querySelector('.kissMyAss');
             const backgroundVideo = document.getElementById('background-video');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const audioToggle = document.getElementById('audioToggle');
+            const visitorCountEl = document.querySelector('#visitorCount .count');
+            const visitorPing = document.querySelector('#visitorCount .visitor-ping');
+            const rolesEl = document.getElementById('rolesRotator');
+            const roles = [
+                'Programming',
+                'CEO',
+                'Video Editor',
+                'Owner at CookieGuard',
+                'Reverse Engineering',
+                'Malware Analysis'
+            ];
+            let idx = 0;
+            function rotateRole() {
+                rolesEl.style.opacity = '0';
+                setTimeout(() => {
+                    rolesEl.textContent = roles[idx];
+                    rolesEl.style.opacity = '1';
+                    idx = (idx + 1) % roles.length;
+                }, 200);
+            }
+            rotateRole();
+            const rotateTimer = setInterval(rotateRole, 2200);
+
+            function showEnter() {
+                buttonStart.classList.add('show');
+                enterWrapper.classList.add('show');
+            }
+            let enterTimeout = setTimeout(showEnter, 1800);
+            backgroundVideo.addEventListener('canplaythrough', () => {
+                showEnter();
+                clearTimeout(enterTimeout);
+            });
 
             buttonStart.addEventListener("click", function () {
                 kissMyAss.style.opacity = '0';
                 setTimeout(() => {
                     kissMyAss.style.display = 'none'; 
                 }, 1000);
+                clearInterval(rotateTimer);
 
                 backgroundVideo.style.display = 'block';
                 backgroundVideo.play();
+                backgroundVideo.muted = false;
+                backgroundMusic.muted = false;
+                backgroundMusic.play().catch(()=>{});
+                audioToggle.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
             });
+
+            audioToggle.addEventListener('click', () => {
+                const nextMuted = !(backgroundMusic.muted || backgroundVideo.muted);
+                backgroundMusic.muted = nextMuted;
+                backgroundVideo.muted = nextMuted;
+                audioToggle.innerHTML = nextMuted
+                    ? '<i class="fa-solid fa-volume-xmark"></i>'
+                    : '<i class="fa-solid fa-volume-high"></i>';
+            });
+
+            document.getElementById('clock').addEventListener('click', () => {
+                hour12 = !hour12;
+                updateClock();
+            });
+
+            function showPing() {
+                visitorPing.style.opacity = '1';
+                setTimeout(() => visitorPing.style.opacity = '0', 400);
+            }
+
+            async function updateVisitorCount() {
+                const ns = 'nomorelife';
+                let key;
+                try {
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    if (!ipRes.ok) throw new Error('ipify_failed');
+                    const ipData = await ipRes.json();
+                    key = 'ip_' + ipData.ip;
+                } catch {
+                    let sid = localStorage.getItem('sid');
+                    if (!sid) {
+                        sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+                        localStorage.setItem('sid', sid);
+                    }
+                    key = 'sid_' + sid;
+                }
+                const visitedKey = 'visited_' + key;
+                try {
+                    if (!localStorage.getItem(visitedKey)) {
+                        const inc = await fetch(`https://api.countapi.xyz/update/${ns}/unique_visitors/?amount=1`);
+                        if (!inc.ok) throw new Error('countapi_update_failed');
+                        localStorage.setItem(visitedKey, '1');
+                    }
+                    const totalRes = await fetch(`https://api.countapi.xyz/get/${ns}/unique_visitors`);
+                    if (!totalRes.ok) throw new Error('countapi_get_failed');
+                    const total = await totalRes.json();
+                    visitorCountEl.textContent = typeof total.value === 'number' ? total.value : '—';
+                    showPing();
+                } catch {
+                    const totalKey = 'unique_visitors_local_total';
+                    let localTotal = parseInt(localStorage.getItem(totalKey) || '0', 10);
+                    if (!localStorage.getItem(visitedKey)) {
+                        localTotal += 1;
+                        localStorage.setItem(visitedKey, '1');
+                        localStorage.setItem(totalKey, localTotal.toString());
+                    }
+                    visitorCountEl.textContent = localTotal;
+                    showPing();
+                }
+            }
+            updateVisitorCount();
         });
     </script>
 </body>
