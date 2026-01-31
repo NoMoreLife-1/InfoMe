@@ -188,6 +188,22 @@
             outline: 2px solid var(--accent2);
             outline-offset: 2px;
         }
+        .audio-fab {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.12);
+            border: 1px solid var(--border);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.35), 0 0 24px rgba(0,73,229,0.35);
+            z-index: 10600;
+        }
+        .audio-fab.active {
+            box-shadow: 0 0 0 10px rgba(0,73,229,0.15), 0 0 30px rgba(0,73,229,0.6);
+        }
 
         .feedback-btn {
             background-color: var(--accent1);
@@ -498,25 +514,6 @@
             </a>
         </div>
 
-        <div class="controls">
-            <div id="visitorCount" aria-live="polite">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <defs>
-                        <linearGradient id="eyeGradient" x1="0" y1="0" x2="24" y2="24">
-                            <stop offset="0%" stop-color="#0049E5"></stop>
-                            <stop offset="100%" stop-color="#00e5ff"></stop>
-                        </linearGradient>
-                    </defs>
-                    <path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path>
-                </svg>
-                <span>Views</span>
-                <span class="count">0</span>
-                <span class="visitor-ping"></span>
-            </div>
-            <button id="audioToggle" class="control-btn" aria-label="Toggle audio" title="Toggle audio">
-                <i class="fa-solid fa-volume-high"></i>
-            </button>
-        </div>
 
 
     <audio id="backgroundMusic" loop>
@@ -542,8 +539,6 @@
             const backgroundVideo = document.getElementById('background-video');
             const backgroundMusic = document.getElementById('backgroundMusic');
             const audioToggle = document.getElementById('audioToggle');
-            const visitorCountEl = document.querySelector('#visitorCount .count');
-            const visitorPing = document.querySelector('#visitorCount .visitor-ping');
             const rolesEl = document.getElementById('rolesRotator');
             const brandEl = document.querySelector('.brand');
             const roles = [
@@ -609,6 +604,7 @@
                 backgroundMusic.muted = false;
                 backgroundMusic.play().catch(()=>{});
                 audioToggle.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+                audioToggle.classList.add('active');
             });
 
             audioToggle.addEventListener('click', () => {
@@ -618,59 +614,13 @@
                 audioToggle.innerHTML = nextMuted
                     ? '<i class="fa-solid fa-volume-xmark"></i>'
                     : '<i class="fa-solid fa-volume-high"></i>';
+                audioToggle.classList.toggle('active', !nextMuted);
             });
 
             document.getElementById('clock').addEventListener('click', () => {
                 hour12 = !hour12;
                 updateClock();
             });
-
-            function showPing() {
-                visitorPing.style.opacity = '1';
-                setTimeout(() => visitorPing.style.opacity = '0', 400);
-            }
-
-            async function updateVisitorCount() {
-                const ns = 'nomorelife';
-                let key;
-                try {
-                    const ipRes = await fetch('https://api.ipify.org?format=json');
-                    if (!ipRes.ok) throw new Error('ipify_failed');
-                    const ipData = await ipRes.json();
-                    key = 'ip_' + ipData.ip;
-                } catch {
-                    let sid = localStorage.getItem('sid');
-                    if (!sid) {
-                        sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
-                        localStorage.setItem('sid', sid);
-                    }
-                    key = 'sid_' + sid;
-                }
-                const visitedKey = 'visited_' + key;
-                try {
-                    if (!localStorage.getItem(visitedKey)) {
-                        const inc = await fetch(`https://api.countapi.xyz/update/${ns}/unique_visitors/?amount=1`);
-                        if (!inc.ok) throw new Error('countapi_update_failed');
-                        localStorage.setItem(visitedKey, '1');
-                    }
-                    const totalRes = await fetch(`https://api.countapi.xyz/get/${ns}/unique_visitors`);
-                    if (!totalRes.ok) throw new Error('countapi_get_failed');
-                    const total = await totalRes.json();
-                    visitorCountEl.textContent = typeof total.value === 'number' ? total.value : '—';
-                    showPing();
-                } catch {
-                    const totalKey = 'unique_visitors_local_total';
-                    let localTotal = parseInt(localStorage.getItem(totalKey) || '0', 10);
-                    if (!localStorage.getItem(visitedKey)) {
-                        localTotal += 1;
-                        localStorage.setItem(visitedKey, '1');
-                        localStorage.setItem(totalKey, localTotal.toString());
-                    }
-                    visitorCountEl.textContent = localTotal;
-                    showPing();
-                }
-            }
-            updateVisitorCount();
         });
     </script>
 </body>
