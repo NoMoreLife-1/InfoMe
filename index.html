@@ -328,18 +328,27 @@
             background: linear-gradient(to right, var(--accent1), var(--accent2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            opacity: 0.95;
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+            filter: blur(6px);
+        }
+        .brand.show {
+            animation: text-reveal 800ms ease-out forwards;
         }
         .roles-rotator {
             margin-top: 12px;
             font-size: 1rem;
             letter-spacing: 1px;
             color: var(--text);
-            opacity: 0.9;
-            transition: opacity 0.25s ease;
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+            filter: blur(6px);
             background: linear-gradient(to right, #ffffff, #00e5ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        .roles-rotator.show {
+            animation: text-reveal 900ms ease-out 200ms forwards;
         }
 
         #visitorCount {
@@ -442,6 +451,10 @@
             0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
             70%, 100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
         }
+        @keyframes text-reveal {
+            0% { opacity: 0; filter: blur(8px); transform: translateY(12px) scale(0.98); }
+            100% { opacity: 1; filter: blur(0); transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -532,6 +545,7 @@
             const visitorCountEl = document.querySelector('#visitorCount .count');
             const visitorPing = document.querySelector('#visitorCount .visitor-ping');
             const rolesEl = document.getElementById('rolesRotator');
+            const brandEl = document.querySelector('.brand');
             const roles = [
                 'Programming',
                 'CEO',
@@ -541,33 +555,53 @@
                 'Malware Analysis'
             ];
             let idx = 0;
-            function rotateRole() {
-                rolesEl.style.opacity = '0';
-                setTimeout(() => {
-                    rolesEl.textContent = roles[idx];
-                    rolesEl.style.opacity = '1';
-                    idx = (idx + 1) % roles.length;
-                }, 200);
+            let rolesActive = true;
+            let rolesTimeout;
+            function scrambleTo(el, next) {
+                const chars = '!<>-_\\/[]{}—=+*^?#';
+                const len = next.length;
+                let reveal = 0;
+                return new Promise(resolve => {
+                    const t = setInterval(() => {
+                        let out = '';
+                        for (let i = 0; i < len; i++) {
+                            out += i < reveal ? next[i] : chars[Math.floor(Math.random() * chars.length)];
+                        }
+                        el.textContent = out;
+                        reveal++;
+                        if (reveal > len) {
+                            clearInterval(t);
+                            el.textContent = next;
+                            resolve();
+                        }
+                    }, 30);
+                });
             }
-            rotateRole();
-            const rotateTimer = setInterval(rotateRole, 2200);
+            async function cycleRoles() {
+                if (!rolesActive) return;
+                await scrambleTo(rolesEl, roles[idx]);
+                idx = (idx + 1) % roles.length;
+                rolesTimeout = setTimeout(cycleRoles, 1000);
+            }
+            cycleRoles();
+            requestAnimationFrame(() => {
+                brandEl.classList.add('show');
+                rolesEl.classList.add('show');
+            });
 
             function showEnter() {
                 buttonStart.classList.add('show');
                 enterWrapper.classList.add('show');
             }
-            let enterTimeout = setTimeout(showEnter, 1800);
-            backgroundVideo.addEventListener('canplaythrough', () => {
-                showEnter();
-                clearTimeout(enterTimeout);
-            });
+            setTimeout(showEnter, 2000);
 
             buttonStart.addEventListener("click", function () {
                 kissMyAss.style.opacity = '0';
                 setTimeout(() => {
                     kissMyAss.style.display = 'none'; 
                 }, 1000);
-                clearInterval(rotateTimer);
+                rolesActive = false;
+                clearTimeout(rolesTimeout);
 
                 backgroundVideo.style.display = 'block';
                 backgroundVideo.play();
