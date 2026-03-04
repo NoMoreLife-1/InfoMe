@@ -11,10 +11,14 @@
     <meta name="twitter:card" content="summary_large_image">
     <title>NoMoreLife</title>
 
-    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"></noscript>
+    <script defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root {
             --bg: #08080c;
@@ -604,7 +608,9 @@
         }
 
         @media (max-width: 768px) {
-            .card { padding: 40px 28px; border-radius: 22px; }
+            .bg-orbs .orb { filter: blur(60px); }
+            .card { padding: 40px 28px; border-radius: 22px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+            .discord-profile { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
             .social-links { gap: 10px; }
             .social-link { width: 48px; height: 48px; font-size: 1.15rem; border-radius: 14px; }
             .entry-brand { letter-spacing: 5px; }
@@ -612,6 +618,9 @@
             .discord-avatar { width: 30px; height: 30px; }
             .discord-name { font-size: 0.72rem; }
             .discord-custom-status { font-size: 0.6rem; max-width: 130px; }
+        }
+        @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+            .bg-orbs .orb { animation: none; }
         }
         @media (max-width: 400px) {
             .card { padding: 32px 20px; }
@@ -636,7 +645,7 @@
         <span class="enter-hint">click to continue</span>
     </div>
 
-    <video class="background-video" id="background-video" loop style="display:none">
+    <video class="background-video" id="background-video" loop preload="none" playsinline style="display:none">
         <source src="1.mp4" type="video/mp4">
     </video>
     <div class="background-overlay"></div>
@@ -684,7 +693,7 @@
         </div>
     </div>
 
-    <audio id="backgroundMusic" loop>
+    <audio id="backgroundMusic" loop preload="none">
         <source src="https://cdn.discordapp.com/attachments/1133001504614252664/1162213280937418844/x2mate.com_-_-_Mostafa_Elnesr_-_ANA_Z3LTK_Official_Audio_128_kbps.mp3" type="audio/mpeg">
     </audio>
 
@@ -778,6 +787,7 @@
                 clearTimeout(rolesTimeout);
 
                 bgVideo.style.display = 'block';
+                bgVideo.load();
                 bgVideo.play();
                 bgVideo.muted = false;
                 bgMusic.muted = false;
@@ -831,6 +841,8 @@
 
                     const u = d.discord_user;
                     const ext = u.avatar && u.avatar.startsWith('a_') ? 'gif' : 'png';
+                    avatarImg.decoding = 'async';
+                    avatarImg.loading = 'lazy';
                     avatarImg.src = 'https://cdn.discordapp.com/avatars/' + u.id + '/' + u.avatar + '.' + ext + '?size=128';
                     nameEl.textContent = u.global_name || u.display_name || u.username;
 
